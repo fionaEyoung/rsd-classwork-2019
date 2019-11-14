@@ -1,5 +1,5 @@
 """Computation of weighted average of squares."""
-
+from argparse import ArgumentParser
 
 def average_of_squares(list_of_numbers, list_of_weights=None):
     """
@@ -50,13 +50,25 @@ def convert_numbers(list_of_strings):
 
 
 if __name__ == "__main__":
-    with open("numbers.txt", "r") as numbers_file:
+
+
+    parser = ArgumentParser()
+    parser.add_argument("numbers")
+    parser.add_argument("--weights", "-w")
+    args = parser.parse_args()
+
+
+    with open(args.numbers, "r") as numbers_file:
         numbers_strings = numbers_file.readlines()
     # TODO Can we make this optional, so that we don't need a weights file?
-    with open("weights.txt", "r") as weights_file:
-        weight_strings = weights_file.readlines()
+    if args.weights:
+        with open(args.weights, "r") as weights_file:
+            weight_strings = weights_file.readlines()
+        weights = convert_numbers(weight_strings)
+    else:
+        weights = None
+        
     numbers = convert_numbers(numbers_strings)
-    weights = convert_numbers(weight_strings)
     # TODO Can we add the option of computing the square root of this result?
     result = average_of_squares(numbers, weights)
     # TODO Can we write the result in a file instead of printing it?
